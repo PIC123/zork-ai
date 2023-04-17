@@ -36,7 +36,7 @@ const App: React.FC = () => {
       <div className="center">
         <img
           src={imageUrl}
-          alt="Your image"
+          alt="game viz"
           className={isMobile ? "image-mobile" : "image-desktop"}
         />
         <p>Some caption text</p>
