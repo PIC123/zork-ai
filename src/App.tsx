@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { useMediaQuery } from "react-responsive";
 
-function App() {
+const App: React.FC = () => {
+  const [caption, setCaption] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState('');
+
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  const handleSubmit = () => {
+    alert(`Caption: ${caption}`);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCaption(event.target.value);
+  };
+
+  const endpoint = 'https://zorkaihelper.azurewebsites.net/api/getImgURL';
+  fetch(endpoint, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+      'Content-Type': 'application/json',
+  }
+  })
+    .then((response) => response.json())
+    .then((data) => setImageUrl(data.url))
+    .then((data) => console.log(data))
+    .catch((error) => console.log(error));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <audio src="https://dreammachinesa.blob.core.windows.net/sounds/Feel-Good.mp3" autoPlay loop />
+      <div className="center">
+        <img
+          src={imageUrl}
+          alt="Your image"
+          className={isMobile ? "image-mobile" : "image-desktop"}
+        />
+        <p>Some caption text</p>
+        <input
+          type="text"
+          value={caption}
+          onChange={handleChange}
+          placeholder="Enter caption..."
+        />
+        <button onClick={handleSubmit}>Submit</button>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
